@@ -1,9 +1,6 @@
 package com.example.mercadolivre.newUser;
 
-import com.example.mercadolivre.validators.EmailUniqueValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -16,14 +13,6 @@ public class UserController {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Autowired
-    private EmailUniqueValidator emailUniqueValidator;
-
-    @InitBinder
-    public void init(WebDataBinder binder) {
-        binder.addValidators(emailUniqueValidator);
-    }
 
     @PostMapping
     @Transactional
