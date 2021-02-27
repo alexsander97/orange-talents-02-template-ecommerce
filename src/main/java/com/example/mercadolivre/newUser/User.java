@@ -36,6 +36,14 @@ public class User {
 
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     public User(@Email @NotBlank String email, @NotBlank @Length(min = 6) CleanPassword cleanPassword) {
         Assert.isTrue(StringUtils.hasLength(email), "email não pode ser em branco");
         Assert.notNull(cleanPassword, "o objeto do tipo senha não pode ser nulo");
