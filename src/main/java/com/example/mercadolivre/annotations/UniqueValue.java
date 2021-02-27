@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface UniqueValue {
 
-    String message() default "{com.example.beanvalidation.uniquevalue}";
+    String message() default "{Este campo já está cadastrado.}";
 
     Class<?>[] groups() default { };
 

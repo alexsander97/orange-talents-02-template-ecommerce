@@ -15,17 +15,17 @@ public class NewUserRequest {
 
     @NotBlank
     @Length(min = 6)
-    private String senha;
+    private String password;
 
     public String getEmail() {
         return email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
     public User toEntity() {
-        return new User(this.email, new CleanPassword(this.senha));
+        return new User(this.email, new CleanPassword(this.password));
     }
 }
