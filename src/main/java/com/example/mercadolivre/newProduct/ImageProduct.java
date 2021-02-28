@@ -1,0 +1,35 @@
+package com.example.mercadolivre.newProduct;
+
+import org.hibernate.validator.constraints.URL;
+
+import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+@Entity
+public class ImageProduct {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @Valid
+    @NotNull
+    private Product product;
+
+    @URL
+    @NotBlank
+    private String link;
+
+    @Deprecated
+    public ImageProduct() {
+
+    }
+
+    public ImageProduct(@NotNull @Valid Product product, @URL String link) {
+        this.product = product;
+        this.link = link;
+    }
+}

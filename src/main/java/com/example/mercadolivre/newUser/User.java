@@ -20,7 +20,7 @@ public class User {
 
     @Email @NotBlank
     @Column(name = "EMAIL", nullable = false, unique = true)
-    private  String email;
+    private String email;
 
     @NotBlank
     @Length(min = 6)

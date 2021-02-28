@@ -1,12 +1,10 @@
 package com.example.mercadolivre.newProduct;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-public class Characteristics {
+public class Characteristic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +14,27 @@ public class Characteristics {
 
     private String name;
 
-    public Characteristics(CharacteristicsDto dto) {
-        this.name = dto.getName();
-        this.description = dto.getDescription();
+    @ManyToOne
+    private Product product;
+
+    @Deprecated
+    public Characteristic() {
+
     }
+
+    public Characteristic(String name, String description, Product product) {
+        this.name = name;
+        this.description = description;
+        this.product = product;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Characteristic that = (Characteristic) o;
+        return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(name, that.name) && Objects.equals(product, that.product);
+    }
+
+
 }
