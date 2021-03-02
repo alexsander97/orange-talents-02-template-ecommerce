@@ -6,6 +6,9 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class ImageProduct {
@@ -32,4 +35,10 @@ public class ImageProduct {
         this.product = product;
         this.link = link;
     }
+
+    public String getLink() {
+        return link;
+    }
+
+
 }

@@ -1,7 +1,8 @@
 package com.example.mercadolivre.newProduct;
 
-import ch.qos.logback.core.util.COWArrayList;
 import com.example.mercadolivre.newCategory.Category;
+import com.example.mercadolivre.newOpinion.Opnion;
+import com.example.mercadolivre.newQuestion.Question;
 import com.example.mercadolivre.newUser.User;
 import io.jsonwebtoken.lang.Assert;
 import org.hibernate.validator.constraints.Length;
@@ -13,10 +14,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Entity
@@ -26,15 +25,21 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "PRICE", nullable = false)
+    @Positive
     private BigDecimal price;
 
+    @Positive
     private Integer quantity;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
     private Set<Characteristic> characteristics = new HashSet<>();
 
+    @NotBlank @Length(max = 1000)
+    @Column(name = "DESCRIPTION", nullable = false)
     private String description;
 
     @NotNull @Valid
@@ -44,10 +49,19 @@ public class Product {
     @ManyToOne
     private User user;
 
+    @Column(name = "DATE_CREATION", nullable = false)
     private LocalDateTime dateCreation;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
     private Set<ImageProduct> images = new HashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    @OrderBy("title asc")
+    private SortedSet<Question> questions = new TreeSet<>();
+
+
+    @OneToMany(mappedBy = "product")
+    private Set<Opnion> opnions = new HashSet<>();
 
     @Deprecated
     public Product() {
@@ -90,5 +104,49 @@ public class Product {
 
     public boolean belongsToUser(User user) {
         return this.user.equals(user);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public <T> Set<T> mapCharacteristics(Function<Characteristic, T> function) {
+        return this.characteristics.stream().map(function).collect(Collectors.toSet());
+    }
+
+    public <T> Set<T> mapImages(Function<ImageProduct, T> function) {
+        return this.images.stream().map(function).collect(Collectors.toSet());
+    }
+
+    public <T extends Comparable<T>> SortedSet<T> mapQuestions(Function<Question, T> function) {
+        return this.questions.stream().map(function).collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    public <T> Set<T> mapOpnions(Function<Opnion, T> function) {
+        return this.opnions.stream().map(function).collect(Collectors.toSet());
+    }
+
+    public Double getAverageOfAssessmentOpnions() {
+        double sum = 0.0;
+        for (Opnion opnion : opnions) {
+            sum += opnion.getAssessment();
+        }
+        return sum / opnions.size();
+    }
+
+    public Integer getCountOpnions() {
+        return opnions.size();
     }
 }

@@ -23,11 +23,8 @@ public class NewQuestionRequest {
         return new Question(title, product, user);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public Long getIdProduct() {
-        return idProduct;
+    public NewQuestionRequest(@NotBlank String title, @NotNull Long idProduct) {
+        this.title = title;
+        this.idProduct = idProduct;
     }
 }

@@ -36,5 +36,11 @@ public class Characteristic {
         return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(name, that.name) && Objects.equals(product, that.product);
     }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public String getName() {
+        return name;
+    }
 }

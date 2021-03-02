@@ -51,5 +51,7 @@ public class User {
         this.password = cleanPassword.hash();
         this.creationDate = LocalDateTime.now();
     }
+
+
 }
 
