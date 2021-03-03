@@ -149,4 +149,13 @@ public class Product {
     public Integer getCountOpnions() {
         return opnions.size();
     }
+
+    public boolean withdrawStock(Integer quantity) {
+        Assert.isTrue(quantity >= 0, "A quantidade tem que ser maior que zero para abater do estoque.");
+        if (quantity <= this.quantity) {
+            this.quantity -= quantity;
+            return true;
+        }
+        return false;
+    }
 }
