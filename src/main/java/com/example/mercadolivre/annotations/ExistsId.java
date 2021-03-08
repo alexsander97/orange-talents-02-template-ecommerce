@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface ExistsId {
 
-    String message() default "{com.example.beanvalidation.existsid}";
+    String message() default "{Este id não existe}";
 
     Class<?>[] groups() default { };
 

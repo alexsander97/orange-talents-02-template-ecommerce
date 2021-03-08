@@ -1,17 +1,34 @@
 package com.example.mercadolivre.newPurchase;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
 public enum GatewayPayment {
 
-    PAYPAL("paypal.com/{idGeradoDaCompra}"),
-    PAGSEGURO("pagseguro.com?returnId={idGeradoDaCompra}&redirectUrl={urlRetornoAppPosPagamento}");
+    PAGSEGURO {
+        @Override
+        String createUrlReturn(Purchase purchase,
+                              UriComponentsBuilder uriComponentsBuilder) {
+            String urlReturnPagseguro = uriComponentsBuilder
+                    .path("/retorno-pagseguro/{id}")
+                    .buildAndExpand(purchase.getId()).toString();
 
-    private String description;
+            return "pagseguro.com?returnId=" + purchase.getId() + "&redirectUrl="
+                    + urlReturnPagseguro;
+        }
+    },
+    PAYPAL {
+        @Override
+        String createUrlReturn(Purchase purchase,
+                              UriComponentsBuilder uriComponentsBuilder) {
+            String urlReturnPaypal = uriComponentsBuilder
+                    .path("/retorno-paypal/{id}").buildAndExpand(purchase.getId())
+                    .toString();
 
-    GatewayPayment(String description) {
-        this.description = description;
-    }
+            return "paypal.com/" + purchase.getId() + "?redirectUrl=" + urlReturnPaypal;
+        }
+    };
 
-    public String getDescription() {
-        return description;
-    }
+    abstract String createUrlReturn(Purchase purchase,
+                                   UriComponentsBuilder uriComponentsBuilder);
 }
+

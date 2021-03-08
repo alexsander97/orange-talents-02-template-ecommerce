@@ -16,6 +16,11 @@ public class NewCategoryRequest {
     @Positive
     private Long idCategoryMother;
 
+    public NewCategoryRequest(@NotBlank String name, @Positive Long idCategoryMother) {
+        this.name = name;
+        this.idCategoryMother = idCategoryMother;
+    }
+
     public String getName() {
         return name;
     }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class NewProductRequest {
 
@@ -90,14 +91,14 @@ public class NewProductRequest {
     }
 
     public Set<String> lookingEqualCharacteristics() {
-        HashSet<String> equalNames = new HashSet<>();
-        HashSet<String> result = new HashSet<>();
-        for (NewCharacteristicRequest characteristic : characteristics) {
-            String name = characteristic.getName();
-            if (!equalNames.add(name)) {
-                result.add(name);
-            }
-        }
+        Set<String> equalNames = new HashSet<>();
+        Set<String> result = characteristics.stream()
+                .map(newCharacteristicRequest -> newCharacteristicRequest.getName())
+                .filter(name -> !equalNames.add(name))
+                .collect(Collectors.toSet());
         return result;
     }
+
+
+
 }

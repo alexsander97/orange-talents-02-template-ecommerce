@@ -24,6 +24,7 @@ public class ImageProduct {
 
     @URL
     @NotBlank
+    @Column(name = "LINK", nullable = false)
     private String link;
 
     @Deprecated

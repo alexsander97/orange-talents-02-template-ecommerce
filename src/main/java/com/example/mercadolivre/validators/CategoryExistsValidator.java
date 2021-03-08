@@ -2,6 +2,7 @@ package com.example.mercadolivre.validators;
 
 import com.example.mercadolivre.newCategory.Category;
 import com.example.mercadolivre.newCategory.NewCategoryRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -12,8 +13,13 @@ import javax.persistence.PersistenceContext;
 @Component
 public class CategoryExistsValidator implements Validator {
 
-    @PersistenceContext
+
     private EntityManager entityManager;
+
+    @Autowired
+    public CategoryExistsValidator(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {

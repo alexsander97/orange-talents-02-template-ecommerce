@@ -1,9 +1,9 @@
 package com.example.mercadolivre.newOpinion;
 
-import com.example.mercadolivre.newProduct.ImageProduct;
+
 import com.example.mercadolivre.newProduct.Product;
 import com.example.mercadolivre.newUser.User;
-import com.example.mercadolivre.security.LoggedUser;
+
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -12,9 +12,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
 
 @Entity
 public class Opnion {

@@ -1,7 +1,6 @@
 package com.example.mercadolivre.getDetailsProduct;
 
-import com.example.mercadolivre.newOpinion.Opnion;
-import com.example.mercadolivre.newProduct.Characteristic;
+
 import com.example.mercadolivre.newProduct.ImageProduct;
 import com.example.mercadolivre.newProduct.Product;
 import com.example.mercadolivre.newQuestion.Question;

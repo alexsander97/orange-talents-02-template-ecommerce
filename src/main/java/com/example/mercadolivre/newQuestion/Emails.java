@@ -19,7 +19,7 @@ public class Emails {
                 question.getProductOwner().getEmail());
     }
 
-    public void newPurchase(@NotNull @Valid Purchase purchase) {
+    public void newPurchaseToSeller(@NotNull @Valid Purchase purchase) {
         mailer.send("<html>...</html>", "Usuário tal disse que queria comprar o seu produto..",
                 purchase.getUser().getEmail(), "novapergunta@nossomercadolivre.com",
                 purchase.getProduct().getUser().getEmail());

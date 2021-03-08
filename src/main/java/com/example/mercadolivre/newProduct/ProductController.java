@@ -25,9 +25,10 @@ public class ProductController {
     @Autowired
     private UploaderFake uploaderFake;
 
-    @InitBinder(value = "novoProdutoRequest")
+
+    @InitBinder(value = "newProductRequest")
     public void init(WebDataBinder binder) {
-        binder.addValidators(new AvoidCharacteristicWithSameNameValidator());
+        binder.addValidators(new AvoidCharacteristicWithSameNameValidator(entityManager));
     }
 
     @PostMapping

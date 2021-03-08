@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -30,6 +34,12 @@ public class CategoryController {
     public void create(@RequestBody @Valid NewCategoryRequest request) {
         Category category = request.toEntity(entityManager);
         entityManager.persist(category);
+    }
+
+    @GetMapping
+    public List<CategoryResponseDto> list() {
+        List<Category> categories = entityManager.createQuery("SELECT c FROM Category c", Category.class).getResultList();
+        return categories.stream().map(category -> new CategoryResponseDto(category)).collect(toList());
     }
 
 }

@@ -106,6 +106,10 @@ public class Product {
         return this.user.equals(user);
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public User getUser() {
         return user;
     }
@@ -151,7 +155,7 @@ public class Product {
     }
 
     public boolean withdrawStock(Integer quantity) {
-        Assert.isTrue(quantity >= 0, "A quantidade tem que ser maior que zero para abater do estoque.");
+        Assert.isTrue(quantity > 0, "A quantidade tem que ser maior que zero para abater do estoque.");
         if (quantity <= this.quantity) {
             this.quantity -= quantity;
             return true;

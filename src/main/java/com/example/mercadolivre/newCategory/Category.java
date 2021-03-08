@@ -27,4 +27,16 @@ public class Category {
         this.name = name;
         this.categoryMother = category;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Category getCategoryMother() {
+        return categoryMother;
+    }
 }

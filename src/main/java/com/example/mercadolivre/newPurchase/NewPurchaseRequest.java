@@ -19,6 +19,12 @@ public class NewPurchaseRequest {
 
     private GatewayPayment gatewayPayment;
 
+    public NewPurchaseRequest(Long idProduct, @NotNull @Positive Integer quantity, GatewayPayment gatewayPayment) {
+        this.idProduct = idProduct;
+        this.quantity = quantity;
+        this.gatewayPayment = gatewayPayment;
+    }
+
     public Purchase toEntity(EntityManager entityManager, LoggedUser loggedUser, Product product) {
         return new Purchase(product, quantity, loggedUser.get(), gatewayPayment);
     }

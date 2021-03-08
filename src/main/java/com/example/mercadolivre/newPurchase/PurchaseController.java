@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityManager;
@@ -28,6 +25,9 @@ public class PurchaseController {
     @Autowired
     private Emails emails;
 
+    @Autowired
+    private NewPurchaseEvents newPurchaseEvents;
+
     @PostMapping
     @Transactional
     public String create(@RequestBody @Valid NewPurchaseRequest request,
@@ -37,22 +37,38 @@ public class PurchaseController {
         if ( withdrew ) {
             Purchase purchase = request.toEntity(entityManager, loggedUser, product);
             entityManager.persist(purchase);
-            emails.newPurchase(purchase);
+            emails.newPurchaseToSeller(purchase);
             GatewayPayment gatewayPayment = purchase.getGatewayPayment();
-            if (gatewayPayment.equals(GatewayPayment.PAGSEGURO)) {
-                String urlReturnPagSeguro = uriComponentsBuilder.path("/retorno-pagseguro/{id}")
-                        .buildAndExpand(purchase.getId()).toString();
-                return "pagseguro.com/" + purchase.getId() + "?redirectUrl=" + urlReturnPagSeguro;
-            } else {
 
-                String urlReturnPaypal = uriComponentsBuilder.path("/retorno-paypal/{id}")
-                        .buildAndExpand(purchase.getId()).toString();
-                return "paypal.com/" + purchase.getId() + "?redirectUrl=" + urlReturnPaypal;
-            }
+            return purchase.getGatewayPayment().createUrlReturn(purchase, uriComponentsBuilder);
         }
         BindException problemWithStock = new BindException(request, "newPurchaseRequest");
         problemWithStock.reject(null, "Não foi possível realizar a compra");
 
         throw problemWithStock;
+    }
+
+    @PostMapping("/retorno-pagseguro/{id}")
+    @Transactional
+    public String processingPagSeguro(@PathVariable("id") Long idPurchase, @RequestBody @Valid ReturnPagSeguroRequest request) {
+        return processing(idPurchase, request);
+    }
+
+
+    @PostMapping("/retorno-paypal/{id}")
+    @Transactional
+    public String processingPaypal(@PathVariable("id") Long idPurchase,@RequestBody @Valid ReturnPaypalRequest request) {
+        return processing(idPurchase, request);
+    }
+
+    private String processing(Long idPurchase, ReturnGatewayPayment returnGatewayPayment) {
+        Purchase purchase = entityManager.find(Purchase.class, idPurchase);
+        purchase.addTransaction(returnGatewayPayment);
+        entityManager.merge(purchase);
+
+        newPurchaseEvents.processing(purchase);
+
+
+        return purchase.toString();
     }
 }
